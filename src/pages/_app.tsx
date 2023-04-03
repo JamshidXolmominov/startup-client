@@ -1,13 +1,17 @@
 import '../styles/globals.css';
 import '@fontsource/roboto';
+import 'react-multi-carousel/lib/styles.css';
+
 import type { AppProps } from 'next/app';
 import { ChakraProvider } from '@chakra-ui/react';
-import { theme } from '../config/theme';
+import { theme } from 'src/config/theme';
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps }: AppProps) {
 	return (
 		<ChakraProvider theme={theme}>
-			<Component {...pageProps} />;
+			<Component {...pageProps} />
 		</ChakraProvider>
 	);
 }
+
+export default MyApp;

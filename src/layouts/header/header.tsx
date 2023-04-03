@@ -12,7 +12,7 @@ import {
 	useColorMode,
 	useColorModeValue,
 } from '@chakra-ui/react';
-import { DarkLogo, EngIcons, LightLogo, RusIcons, UzbIcons } from '@/src/icons';
+import { DarkLogo, EngIcons, LightLogo, RusIcons, UzbIcons } from 'src/icons';
 import { BsFillMoonFill, BsFillSunFill, BsTranslate } from 'react-icons/bs';
 import { MdOutlineContactSupport } from 'react-icons/md';
 import { BiMenuAltLeft, BiUserCircle } from 'react-icons/bi';
@@ -24,6 +24,7 @@ const Header = ({ onToggle }: HeaderProps) => {
 
 	return (
 		<Box
+			zIndex={1001}
 			w={'full'}
 			h={'10vh'}
 			px={10}
@@ -32,6 +33,8 @@ const Header = ({ onToggle }: HeaderProps) => {
 			top={0}
 			left={0}
 			right={0}
+			bg={useColorModeValue('gray.50', 'gray.900')}
+			color={useColorModeValue('gray.700', 'gray.200')}
 			borderBottomColor={useColorModeValue('gray.200', 'gray.700')}
 		>
 			<Flex h={'full'} justify={'space-between'} align={'center'}>
