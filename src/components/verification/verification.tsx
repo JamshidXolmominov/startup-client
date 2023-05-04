@@ -35,7 +35,11 @@ const Verification = () => {
 					password: user?.password as string,
 					callback: () => {
 						router.push('/');
-						toast({ title: 'Successfully logged in', position: 'top-right', isClosable: true });
+						toast({
+							title: `${t('successfully_logged', { ns: 'global' })}`,
+							position: 'top-right',
+							isClosable: true,
+						});
 					},
 				});
 			},
@@ -94,7 +98,7 @@ const Verification = () => {
 							h={14}
 							type={'submit'}
 							isLoading={isLoading}
-							loadingText={'Loading...'}
+							loadingText={`${t('loading', { ns: 'global' })}`}
 						>
 							{t('verification_btn', { ns: 'global' })}
 						</Button>
