@@ -15,8 +15,9 @@ import {
 } from '@chakra-ui/react';
 import { Form, Formik, FormikValues } from 'formik';
 import Image from 'next/image';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { FileUploader } from 'react-drag-drop-files';
+import { useTranslation } from 'react-i18next';
 import { FaTimes } from 'react-icons/fa';
 import { coursePrice } from 'src/config/constants';
 import { loadImage } from 'src/helpers/image.helper';
@@ -29,14 +30,15 @@ import SelectField from '../select-field/select-field';
 import TextFiled from '../text-filed/text-filed';
 import { BookModalProps } from './books-modal.props';
 
-const BooksModal: FC<BookModalProps> = ({ isOpen, onClose }): JSX.Element => {
+const BooksModal: FC<BookModalProps> = ({ isOpen, onClose, booksValue }): JSX.Element => {
 	const [values, setValues] = useState(data);
 	const [file, setFile] = useState<File | string | null>();
 	const [errorFile, setErrorFile] = useState('');
 
-	const { startCreateBooksLoading, createBooks, clearBooksError } = useActions();
+	const { startCreateBooksLoading, createBooks, clearBooksError, updateBooks } = useActions();
 	const { isLoading, error } = useTypedSelector(state => state.books);
 	const toast = useToast();
+	const { t } = useTranslation();
 
 	const handleChange = (file: File) => {
 		setFile(file);
@@ -44,7 +46,7 @@ const BooksModal: FC<BookModalProps> = ({ isOpen, onClose }): JSX.Element => {
 
 	const onSubmit = async (fomrikValues: FormikValues) => {
 		if (!file) {
-			setErrorFile('Preview image is required');
+			setErrorFile(t('preview_img_is_requried', { ns: 'global' }) as string);
 			return;
 		}
 		let imageUrl = file;
@@ -56,21 +58,54 @@ const BooksModal: FC<BookModalProps> = ({ isOpen, onClose }): JSX.Element => {
 			imageUrl = response.url;
 		}
 
-		createBooks({
-			price: fomrikValues.price,
-			title: fomrikValues.title,
-			pdf: fomrikValues.pdf,
-			image: imageUrl as string,
-			callback: () => {
-				toast({
-					title: 'Successfully created',
-					position: 'top-right',
-					isClosable: true,
-					status: 'success',
-				});
-			},
-		});
+		if (!booksValue) {
+			createBooks({
+				price: fomrikValues.price,
+				title: fomrikValues.title,
+				pdf: fomrikValues.pdf,
+				image: imageUrl as string,
+				callback: () => {
+					toast({
+						title: t('successfully_created_course', { ns: 'instructor' }),
+						position: 'top-right',
+						isClosable: true,
+						status: 'success',
+					});
+					setFile(null);
+					onClose();
+				},
+			});
+		} else {
+			updateBooks({
+				price: fomrikValues.price,
+				title: fomrikValues.title,
+				pdf: fomrikValues.pdf,
+				_id: booksValue._id,
+				image: imageUrl as string,
+				callback: () => {
+					toast({
+						title: t('successfully_edited', { ns: 'instructor' }),
+						position: 'top-right',
+						isClosable: true,
+						status: 'success',
+					});
+					setFile(null);
+					onClose();
+				},
+			});
+		}
 	};
+
+	useEffect(() => {
+		setErrorFile('');
+		if (booksValue) {
+			setValues(booksValue);
+			setFile(booksValue.image);
+		} else {
+			setValues(data);
+			setFile(null);
+		}
+	}, [booksValue]);
 
 	return (
 		<Modal isOpen={isOpen} onClose={onClose} isCentered={true} size={'xl'}>
@@ -82,19 +117,24 @@ const BooksModal: FC<BookModalProps> = ({ isOpen, onClose }): JSX.Element => {
 					onSubmit={onSubmit}
 					initialValues={values}
 					validationSchema={BooksValidation.createBooks}
+					enableReinitialize
 				>
 					<Form>
 						<ModalBody>
 							<>{error && <ErrorAlert title={error as string} clearHandler={clearBooksError} />}</>
 							<VStack>
-								<TextFiled name='title' label='Title' placeholder={'Harry Poter'} />
+								<TextFiled
+									name='title'
+									label={t('title', { ns: 'instructor' })}
+									placeholder={'Harry Poter'}
+								/>
 								<SelectField
 									name='price'
-									label={'Books price'}
+									label={t('books_price', { ns: 'admin' })}
 									placeholder='-'
 									arrOptions={coursePrice}
 								/>
-								<TextFiled name='pdf' label='PDF Link' />
+								<TextFiled name='pdf' label={t('pdf_link', { ns: 'admin' })} />
 								{file ? (
 									<Box pos={'relative'} w={'full'} h={200}>
 										<Image
@@ -136,14 +176,8 @@ const BooksModal: FC<BookModalProps> = ({ isOpen, onClose }): JSX.Element => {
 						</ModalBody>
 
 						<ModalFooter>
-							<Button
-								type='submit'
-								isLoading={isLoading}
-								colorScheme='blue'
-								mr={3}
-								onClick={onClose}
-							>
-								Add books
+							<Button type='submit' isLoading={isLoading} colorScheme='blue' mr={3}>
+								{booksValue ? t('edit_book', { ns: 'admin' }) : t('add_book', { ns: 'admin' })}
 							</Button>
 						</ModalFooter>
 					</Form>
