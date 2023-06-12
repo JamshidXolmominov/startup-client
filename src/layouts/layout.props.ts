@@ -17,4 +17,5 @@ export interface AppProviderProps {
 	cards: CardType[];
 	products: ProductsType[];
 	articles: ArticleType[];
+	article: ArticleType;
 }
