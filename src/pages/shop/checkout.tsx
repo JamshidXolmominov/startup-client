@@ -4,6 +4,7 @@ import { API_URL } from 'src/config/api.config';
 import { useTypedSelector } from 'src/hooks/useTypedSelector';
 import { CardType } from 'src/interfaces/constants.interface';
 import { withLayout } from 'src/layouts/layout';
+import Seo from 'src/layouts/seo/seo';
 import { CheckoutPageComponent } from 'src/page-component';
 
 const CheckoutPage: NextPage<CheckoutPageProps> = ({ cards }) => {
@@ -11,7 +12,17 @@ const CheckoutPage: NextPage<CheckoutPageProps> = ({ cards }) => {
 
 	const checkCard = () => books.length || courses.length || product.id;
 
-	return <>{checkCard() ? <CheckoutPageComponent cards={cards} /> : <>Empty cart</>}</>;
+	return (
+		<>
+			{checkCard() ? (
+				<Seo metaTitle='Sammi | Checkout'>
+					<CheckoutPageComponent cards={cards} />
+				</Seo>
+			) : (
+				<>Empty cart</>
+			)}
+		</>
+	);
 };
 
 export default withLayout(CheckoutPage);

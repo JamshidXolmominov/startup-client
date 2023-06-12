@@ -19,25 +19,19 @@ const Account = () => {
 
 	return (
 		<>
-			<Box maxW='7xl' mx={'auto'} px={{ base: 2, sm: 12, md: 17 }}>
+			<Box maxW='7xl' mx={'auto'}>
 				<chakra.h1
 					textAlign={'center'}
-					fontSize={'4xl'}
+					fontSize={{ base: '2xl', md: '4xl' }}
 					pb={6}
 					fontWeight={'bold'}
 				>
 					Your account information.
 				</chakra.h1>
-				<SimpleGrid
-					columns={{ base: 1, md: 3 }}
-					spacing={{ base: 5, lg: 8 }}
-				>
+				<SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 5, lg: 8 }}>
 					<StatsCard
 						title={"Ro'yhatdan o'tgan sana"}
-						stat={`${format(
-							new Date(user?.createdAt as Date),
-							'dd MMMM, yyyy'
-						)}`}
+						stat={`${format(new Date(user?.createdAt as Date), 'dd MMMM, yyyy')}`}
 						icon={<MdUpdate size={'3em'} />}
 					/>
 					<StatsCard
@@ -79,11 +73,7 @@ function StatsCard(props: StatsCardProps) {
 						{stat}
 					</StatNumber>
 				</Box>
-				<Box
-					my={'auto'}
-					color={useColorModeValue('gray.800', 'gray.200')}
-					alignContent={'center'}
-				>
+				<Box my={'auto'} color={useColorModeValue('gray.800', 'gray.200')} alignContent={'center'}>
 					{icon}
 				</Box>
 			</Flex>

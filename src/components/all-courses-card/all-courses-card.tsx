@@ -7,11 +7,11 @@ import {
 	Heading,
 	HStack,
 	Icon,
-	Image,
 	Stack,
 	Text,
 	useToast,
 } from '@chakra-ui/react';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { AiOutlineClockCircle } from 'react-icons/ai';
 import { BsMinecartLoaded } from 'react-icons/bs';
@@ -23,17 +23,13 @@ import { useActions } from 'src/hooks/useActions';
 import { useTypedSelector } from 'src/hooks/useTypedSelector';
 import { AllCoursesCardProps } from './all-courses-card.props';
 
-const AllCoursesCard = ({
-	course,
-	isMyCourse,
-}: AllCoursesCardProps) => {
+const AllCoursesCard = ({ course, isMyCourse }: AllCoursesCardProps) => {
 	const router = useRouter();
 	const { addCourseToCart } = useActions();
 	const { courses } = useTypedSelector(state => state.cart);
 	const toast = useToast();
 
-	const onDetailedCourse = () =>
-		router.push(`/courses/${course.slug}`);
+	const onDetailedCourse = () => router.push(`/courses/${course.slug}`);
 
 	const addCourseToCardHandler = () => {
 		const existingProduct = courses.find(c => c._id === course._id);
@@ -54,40 +50,33 @@ const AllCoursesCard = ({
 		<>
 			<Box py={4}>
 				<Flex gap={4} direction={{ base: 'column', md: 'row' }}>
-					<Image
-						src={loadImage(course.previewImage)}
-						alt={course.title}
-						w={{ base: 'full', md: '250px' }}
-						h={'250px'}
-						borderRadius={'lg'}
-						objectFit={'cover'}
+					<Box
+						position={'relative'}
+						width={{ base: 'full', md: '30%' }}
+						height={'250px'}
 						onClick={onDetailedCourse}
 						cursor={'pointer'}
-					/>
-					<Stack>
+					>
+						<Image
+							src={loadImage(course.previewImage)}
+							alt={course.title}
+							fill
+							style={{ objectFit: 'cover', borderRadius: '10px' }}
+						/>
+					</Box>
+					<Stack w={{ base: 'full', md: '70%' }}>
 						{!isMyCourse && (
 							<HStack>
 								<Text color={'#e59819'}>{course.reviewAvg || 0}</Text>
-								<ReactStars
-									edit={false}
-									value={course.reviewAvg || 5}
-									color2={'#e59819'}
-								/>
+								<ReactStars edit={false} value={course.reviewAvg || 5} color2={'#e59819'} />
 								<Text opacity={'.8'}>({course.reviewCount})</Text>
 							</HStack>
 						)}
 						<Heading fontSize={'xl'}>{course.title}</Heading>
 						<Text>{course.exerpt}</Text>
 						{!isMyCourse && (
-							<Flex
-								gap={2}
-								fontSize={'14px'}
-								direction={{ base: 'column', sm: 'row' }}
-							>
-								<Avatar
-									src={course.author.avatar}
-									name={course.author.fullName}
-								/>
+							<Flex gap={2} fontSize={'14px'} direction={{ base: 'column', sm: 'row' }}>
+								<Avatar src={loadImage(course.author.avatar)} name={course.author.fullName} />
 								<HStack>
 									<Flex align={'center'} gap={1}>
 										<Icon as={CiViewList} />
@@ -122,20 +111,12 @@ const AllCoursesCard = ({
 										rightIcon={<BsMinecartLoaded />}
 										colorScheme={'facebook'}
 										onClick={addCourseToCardHandler}
-										isDisabled={
-											courses.map(c => c._id).includes(course._id)
-												? true
-												: false
-										}
+										isDisabled={courses.map(c => c._id).includes(course._id) ? true : false}
 									>
 										Add to cart
 									</Button>
 								)}
-								<Button
-									onClick={onDetailedCourse}
-									colorScheme={'facebook'}
-									variant={'outline'}
-								>
+								<Button onClick={onDetailedCourse} colorScheme={'facebook'} variant={'outline'}>
 									Detail
 								</Button>
 							</Flex>

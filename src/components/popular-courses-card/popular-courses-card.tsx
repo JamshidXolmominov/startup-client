@@ -1,15 +1,6 @@
-import {
-	Avatar,
-	Box,
-	Divider,
-	Flex,
-	Heading,
-	HStack,
-	Icon,
-	Stack,
-	Text,
-} from '@chakra-ui/react';
+import { Avatar, Box, Divider, Flex, Heading, HStack, Icon, Stack, Text } from '@chakra-ui/react';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { AiOutlineClockCircle } from 'react-icons/ai';
 import { CiViewList } from 'react-icons/ci';
 import { SiGoogleanalytics } from 'react-icons/si';
@@ -18,8 +9,15 @@ import { loadImage } from 'src/helpers/image.helper';
 import { PopularCoursesCardProps } from './popular-courses-card.props';
 
 const PopularCoursesCard = ({ item }: PopularCoursesCardProps) => {
+	const { push } = useRouter();
 	return (
-		<Stack key={item.title} spacing={3} p={3} cursor={'pointer'}>
+		<Stack
+			key={item.title}
+			spacing={3}
+			p={3}
+			cursor={'pointer'}
+			onClick={() => push(`/courses/${item.slug}`)}
+		>
 			<Box pos={'relative'} w={'full'} h={'210px'}>
 				<Image
 					src={loadImage(item.previewImage)}
@@ -30,11 +28,7 @@ const PopularCoursesCard = ({ item }: PopularCoursesCardProps) => {
 			</Box>
 			<HStack>
 				<Text color={'#e59819'}>{item.reviewAvg || 0}</Text>
-				<ReactStars
-					edit={false}
-					value={item.reviewAvg || 5}
-					color2={'#e59819'}
-				/>
+				<ReactStars edit={false} value={item.reviewAvg || 5} color2={'#e59819'} />
 				<Text opacity={'.8'}>({item.reviewCount})</Text>
 			</HStack>
 			<Heading fontSize={'xl'}>{item.title}</Heading>
@@ -55,10 +49,7 @@ const PopularCoursesCard = ({ item }: PopularCoursesCardProps) => {
 			<Divider />
 			<Flex justify={'space-between'} align={'center'}>
 				<HStack align={'center'}>
-					<Avatar
-						src={item.author.avatar}
-						name={item.author.fullName}
-					/>
+					<Avatar src={loadImage(item.author.avatar)} name={item.author.fullName} />
 					<Text>{item.author.fullName}</Text>
 				</HStack>
 				<Text>

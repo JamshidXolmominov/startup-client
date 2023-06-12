@@ -39,10 +39,7 @@ const Settings = () => {
 			if (avatar) {
 				const formData = new FormData();
 				formData.append('image', avatar);
-				const response = await FileService.fileUpload(
-					formData,
-					'avatar'
-				);
+				const response = await FileService.fileUpload(formData, 'avatar');
 				avatarUrl = response.url;
 			}
 			const data = {
@@ -81,8 +78,7 @@ const Settings = () => {
 			setavatar(file);
 		} else {
 			toast({
-				title:
-					"Xatolik, biz faqat PNG va JPG fayllarini qo'llab-quvvatlaymiz",
+				title: "Xatolik, biz faqat PNG va JPG fayllarini qo'llab-quvvatlaymiz",
 				status: 'error',
 			});
 		}
@@ -111,11 +107,7 @@ const Settings = () => {
 		<>
 			<HStack>
 				<Avatar
-					src={
-						avatar
-							? URL.createObjectURL(avatar)
-							: loadImage(user?.avatar)
-					}
+					src={avatar ? URL.createObjectURL(avatar) : loadImage(user?.avatar)}
 					name={user?.fullName}
 					backgroundColor={'facebook.500'}
 					size={'xl'}
@@ -165,36 +157,15 @@ const Settings = () => {
 					</Text>
 				</VStack>
 			</HStack>
-			<Formik
-				onSubmit={onSubmit}
-				initialValues={values}
-				enableReinitialize
-			>
+			<Formik onSubmit={onSubmit} initialValues={values} enableReinitialize>
 				<Form>
-					<Flex gap={5}>
-						<TextFiled
-							name='firstName'
-							label='Ismingiz'
-							placeholder='Omar'
-						/>
-						<TextFiled
-							name='lastName'
-							label='Sharfingiz'
-							placeholder='Osman'
-						/>
+					<Flex gap={{ base: 1, md: 5 }} direction={{ base: 'column', md: 'row' }}>
+						<TextFiled name='firstName' label='Ismingiz' placeholder='Omar' />
+						<TextFiled name='lastName' label='Sharfingiz' placeholder='Osman' />
 					</Flex>
-					<Flex gap={5}>
-						<TextFiled
-							name='birthday'
-							label="Tug'ilgan sana"
-							placeholder='birthday'
-							type='date'
-						/>
-						<TextFiled
-							name='job'
-							label='Kasbingiz'
-							placeholder='Front-End developer'
-						/>
+					<Flex gap={{ base: 1, md: 5 }} direction={{ base: 'column', md: 'row' }}>
+						<TextFiled name='birthday' label="Tug'ilgan sana" placeholder='birthday' type='date' />
+						<TextFiled name='job' label='Kasbingiz' placeholder='Front-End developer' />
 					</Flex>
 					<TextAreaField
 						name='bio'

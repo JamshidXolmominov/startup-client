@@ -1,12 +1,38 @@
-import { Button, Card, CardBody, Flex, FormControl, FormLabel, Heading, Input, Stack, Text, Textarea } from '@chakra-ui/react';
+import { Button, Card, CardBody, Flex, Heading, Stack, Text, useToast } from '@chakra-ui/react';
+import axios from 'axios';
+import { Form, Formik, FormikValues } from 'formik';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import SectionTitle from 'src/components/section-title/section-title';
+import TextAreaField from 'src/components/text-area-field/text-area-field';
+import TextFiled from 'src/components/text-filed/text-filed';
+import { API_URL, getMailUrl } from 'src/config/api.config';
 
 const ContactPageComponent = () => {
 	const { t } = useTranslation();
+	const [isLoading, setIsLoading] = useState(false);
+	const toast = useToast();
+
+	const onSubmit = (formikValues: FormikValues) => {
+		try {
+			setIsLoading(true);
+			axios.post(`${API_URL}${getMailUrl('contact-us')}`, formikValues);
+			toast({ title: 'Successfully', position: 'top-right' });
+			setIsLoading(false);
+		} catch (error) {
+			console.log(error);
+			setIsLoading(false);
+		}
+	};
 
 	return (
-		<Flex h={'90vh'} justify={'flex-start'} direction={{ base: 'column', lg: 'row' }} align={'center'} gap={'4'}>
+		<Flex
+			h={'90vh'}
+			justify={'flex-start'}
+			direction={{ base: 'column', lg: 'row' }}
+			align={'center'}
+			gap={'4'}
+		>
 			<SectionTitle
 				w={{ base: '100%', lg: '40%' }}
 				title={t('contact_title', { ns: 'global' })}
@@ -18,23 +44,37 @@ const ContactPageComponent = () => {
 					<Text fontSize={'lg'} mt={4}>
 						{t('contact_text', { ns: 'global' })}
 					</Text>
-					<Stack spacing={4} mt={5}>
-						<FormControl>
-							<FormLabel>{t('contact_name', { ns: 'global' })}</FormLabel>
-							<Input type='text' placeholder={'Omar'} h={14} />
-						</FormControl>
-						<FormControl>
-							<FormLabel>{t('contact_email', { ns: 'global' })}</FormLabel>
-							<Input type='email' placeholder={'example@sammi.ac'} h={14} />
-						</FormControl>
-						<FormControl>
-							<FormLabel>{t('contact_message', { ns: 'global' })}</FormLabel>
-							<Textarea placeholder={'body'} height={'150px'} />
-						</FormControl>
-						<Button w={'full'} h={14} colorScheme={'facebook'}>
-							{t('contact_btn', { ns: 'global' })}
-						</Button>
-					</Stack>
+					<Formik onSubmit={onSubmit} initialValues={{ email: '', name: '', message: '' }}>
+						<Form>
+							<Stack spacing={4} mt={5}>
+								<TextFiled
+									name='name'
+									label={t('contact_name', { ns: 'global' })}
+									placeholder={'Omar'}
+								/>
+								<TextFiled
+									name='email'
+									label={t('contact_email', { ns: 'global' })}
+									placeholder={'example@sammi.ac'}
+								/>
+								<TextAreaField
+									name={'message'}
+									label={t('contact_message', { ns: 'global' }) as string}
+									height={'150px'}
+								/>
+
+								<Button
+									w={'full'}
+									h={14}
+									colorScheme={'facebook'}
+									type={'submit'}
+									isLoading={isLoading}
+								>
+									{t('contact_btn', { ns: 'global' })}
+								</Button>
+							</Stack>
+						</Form>
+					</Formik>
 				</CardBody>
 			</Card>
 		</Flex>

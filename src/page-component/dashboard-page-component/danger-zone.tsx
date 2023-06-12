@@ -1,12 +1,4 @@
-import {
-	Box,
-	Button,
-	Divider,
-	Icon,
-	InputRightElement,
-	Text,
-	useToast,
-} from '@chakra-ui/react';
+import { Box, Button, Divider, Icon, InputRightElement, Text, useToast } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
@@ -21,8 +13,7 @@ const DangerZone = () => {
 	const { user } = useTypedSelector(state => state.user);
 	const toast = useToast();
 	const { t } = useTranslation();
-	const { show, toggleShow, showConfirm, toggleShowConfirm } =
-		useShowPassword();
+	const { show, toggleShow, showConfirm, toggleShowConfirm } = useShowPassword();
 
 	const onSubmit = (formData: { password: string }) => {
 		editProfilePassword({
@@ -46,7 +37,7 @@ const DangerZone = () => {
 		<>
 			<Text fontSize={'2xl'}>Change password</Text>
 			<Divider my={5} />
-			<Box maxW={'70%'}>
+			<Box w={{ base: '100%', md: '70%' }}>
 				<Formik
 					onSubmit={onSubmit}
 					initialValues={{ password: '', confirmPassword: '' }}
@@ -79,11 +70,7 @@ const DangerZone = () => {
 						>
 							<InputRightElement pt={4}>
 								<Icon
-									as={
-										!showConfirm
-											? AiOutlineEye
-											: AiOutlineEyeInvisible
-									}
+									as={!showConfirm ? AiOutlineEye : AiOutlineEyeInvisible}
 									cursor={'pointer'}
 									onClick={toggleShowConfirm}
 								/>
