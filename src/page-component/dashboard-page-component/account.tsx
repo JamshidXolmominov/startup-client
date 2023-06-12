@@ -41,7 +41,7 @@ const Account = () => {
 					/>
 					<StatsCard
 						title={'Kurslar'}
-						stat={`${user?.courses.length} ta`}
+						stat={`${(user?.courses as string[]).length} ta`}
 						icon={<SiAwesomelists size={'3em'} />}
 					/>
 				</SimpleGrid>

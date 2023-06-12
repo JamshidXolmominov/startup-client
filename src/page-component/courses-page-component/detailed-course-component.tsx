@@ -21,14 +21,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BsBarChart } from 'react-icons/bs';
-import {
-	FaBook,
-	FaLanguage,
-	FaRibbon,
-	FaStar,
-	FaUserGraduate,
-	FaUserTie,
-} from 'react-icons/fa';
+import { FaBook, FaLanguage, FaRibbon, FaStar, FaUserGraduate, FaUserTie } from 'react-icons/fa';
 import { GiInfinity } from 'react-icons/gi';
 import { MdPlayLesson } from 'react-icons/md';
 import { TbCertificate } from 'react-icons/tb';
@@ -38,10 +31,7 @@ import { Curriculum, Mentor, Overview, Review } from 'src/components';
 import { loadImage } from 'src/helpers/image.helper';
 import { useActions } from 'src/hooks/useActions';
 import { useTypedSelector } from 'src/hooks/useTypedSelector';
-import {
-	CourseType,
-	ReviewType,
-} from 'src/interfaces/course.interface';
+import { CourseType, ReviewType } from 'src/interfaces/course.interface';
 import { CourseService } from 'src/services/course.service';
 
 const DetailedCourseComponent = () => {
@@ -72,7 +62,7 @@ const DetailedCourseComponent = () => {
 	};
 
 	const navigateUser = () => {
-		if (user?.courses.includes(course?._id as string)) {
+		if ((user?.courses as string[]).includes(course?._id as string)) {
 			push(`/courses/dashboard/${course?.slug}`);
 		} else {
 			const existingProduct = courses.find(c => c._id == course?._id);
@@ -104,17 +94,10 @@ const DetailedCourseComponent = () => {
 								{course?.title}
 							</Heading>
 							<Text mt={5}>{course?.exerpt}</Text>
-							<Stack
-								mt={5}
-								direction={!media ? 'column' : 'row'}
-								gap={1}
-							>
+							<Stack mt={5} direction={!media ? 'column' : 'row'} gap={1}>
 								<Flex fontSize={'sm'} align={'flex-end'} gap={1}>
 									<Text>{course?.reviewAvg || 0}</Text>
-									<ReactStars
-										edit={false}
-										value={course?.reviewAvg || 5}
-									/>
+									<ReactStars edit={false} value={course?.reviewAvg || 5} />
 									<Text>({course?.reviewCount})</Text>
 								</Flex>
 								<Flex align={'center'} fontSize={'sm'} gap={1}>
@@ -125,11 +108,7 @@ const DetailedCourseComponent = () => {
 									<Icon as={TfiAlarmClock} />
 									<Text>
 										Oxirgi yangilanish{' '}
-										{course &&
-											format(
-												new Date(course.updatedAt),
-												'dd MMMM, yyyy'
-											)}
+										{course && format(new Date(course.updatedAt), 'dd MMMM, yyyy')}
 									</Text>
 								</Flex>
 							</Stack>
@@ -151,12 +130,7 @@ const DetailedCourseComponent = () => {
 											borderRadius: '8px',
 										}}
 									/>
-									<Stack
-										mt={5}
-										direction={'row'}
-										align={'flex-end'}
-										justify={'space-between'}
-									>
+									<Stack mt={5} direction={'row'} align={'flex-end'} justify={'space-between'}>
 										<Heading fontSize={'2xl'}>
 											{course?.price.toLocaleString('en-US', {
 												currency: 'USD',
@@ -164,14 +138,8 @@ const DetailedCourseComponent = () => {
 											})}
 										</Heading>
 									</Stack>
-									<Button
-										mt={5}
-										w={'full'}
-										h={14}
-										colorScheme={'facebook'}
-										onClick={navigateUser}
-									>
-										{user?.courses.includes(course?._id as string)
+									<Button mt={5} w={'full'} h={14} colorScheme={'facebook'} onClick={navigateUser}>
+										{(user?.courses as string[]).includes(course?._id as string)
 											? 'Go'
 											: 'Add to cart'}
 									</Button>
@@ -185,9 +153,7 @@ const DetailedCourseComponent = () => {
 										>
 											<Flex align={'center'} gap={3}>
 												<MdPlayLesson />
-												<Text fontWeight={'bold'}>
-													{t('lessons', { ns: 'courses' })}
-												</Text>
+												<Text fontWeight={'bold'}>{t('lessons', { ns: 'courses' })}</Text>
 											</Flex>
 											<Text>{course?.lessonCount}</Text>
 										</Flex>
@@ -201,13 +167,10 @@ const DetailedCourseComponent = () => {
 										>
 											<Flex align={'center'} gap={3}>
 												<TfiTimer />
-												<Text fontWeight={'bold'}>
-													{t('total_hour', { ns: 'courses' })}
-												</Text>
+												<Text fontWeight={'bold'}>{t('total_hour', { ns: 'courses' })}</Text>
 											</Flex>
 											<Text>
-												{course?.totalHour}{' '}
-												{t('hour', { ns: 'courses' })}
+												{course?.totalHour} {t('hour', { ns: 'courses' })}
 											</Text>
 										</Flex>
 										<Divider />
@@ -220,9 +183,7 @@ const DetailedCourseComponent = () => {
 										>
 											<Flex align={'center'} gap={3}>
 												<BsBarChart />
-												<Text fontWeight={'bold'}>
-													{t('level', { ns: 'courses' })}
-												</Text>
+												<Text fontWeight={'bold'}>{t('level', { ns: 'courses' })}</Text>
 											</Flex>
 											<Text>{course?.level}</Text>
 										</Flex>
@@ -236,9 +197,7 @@ const DetailedCourseComponent = () => {
 										>
 											<Flex align={'center'} gap={3}>
 												<FaLanguage />
-												<Text fontWeight={'bold'}>
-													{t('language', { ns: 'courses' })}
-												</Text>
+												<Text fontWeight={'bold'}>{t('language', { ns: 'courses' })}</Text>
 											</Flex>
 											<Text>{course?.language}</Text>
 										</Flex>
@@ -252,9 +211,7 @@ const DetailedCourseComponent = () => {
 										>
 											<Flex align={'center'} gap={3}>
 												<TbCertificate />
-												<Text fontWeight={'bold'}>
-													{t('sertificate', { ns: 'courses' })}
-												</Text>
+												<Text fontWeight={'bold'}>{t('sertificate', { ns: 'courses' })}</Text>
 											</Flex>
 											<Text>No</Text>
 										</Flex>
@@ -268,9 +225,7 @@ const DetailedCourseComponent = () => {
 										>
 											<Flex align={'center'} gap={3}>
 												<GiInfinity />
-												<Text fontWeight={'bold'}>
-													{t('access', { ns: 'courses' })}
-												</Text>
+												<Text fontWeight={'bold'}>{t('access', { ns: 'courses' })}</Text>
 											</Flex>
 											<Text>Lifetime</Text>
 										</Flex>
@@ -303,11 +258,7 @@ const DetailedCourseComponent = () => {
 							w='100%'
 							justifyContent={'center'}
 						>
-							<Icon
-								as={tab.Icon}
-								mr='2'
-								display={{ base: 'none', md: 'block' }}
-							/>{' '}
+							<Icon as={tab.Icon} mr='2' display={{ base: 'none', md: 'block' }} />{' '}
 							{t(tab.name, { ns: 'courses' })}
 						</Tab>
 					))}
@@ -315,9 +266,7 @@ const DetailedCourseComponent = () => {
 				<Box w={'full'}>
 					{tabIndex === 0 && <Overview />}
 					{tabIndex === 1 && <Curriculum />}
-					{tabIndex === 2 && (
-						<Review reviews={reviews} isLoading={isLoading} />
-					)}
+					{tabIndex === 2 && <Review reviews={reviews} isLoading={isLoading} />}
 					{tabIndex === 3 && <Mentor />}
 				</Box>
 			</Tabs>

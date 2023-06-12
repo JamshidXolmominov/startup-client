@@ -29,9 +29,7 @@ const Sidebar: FC<CourseDashboardProps> = ({ ...props }) => {
 	const [moduleIndex, setModuleIndex] = useState<number>(0);
 	const [isComplete, setIsComplete] = useState<boolean>(false);
 
-	const { sections, pendingSection } = useTypedSelector(
-		state => state.section
-	);
+	const { sections, pendingSection } = useTypedSelector(state => state.section);
 	const { course } = useTypedSelector(state => state.course);
 	const { user } = useTypedSelector(state => state.user);
 	const { getSection, getLesson } = useActions();
@@ -46,11 +44,7 @@ const Sidebar: FC<CourseDashboardProps> = ({ ...props }) => {
 		localStorage.setItem(`${course?._id}`, lesson._id);
 		const link = `/courses/dashboard/${course?.slug}`;
 
-		router.replace(
-			{ pathname: link, query: { lesson: lesson._id } },
-			undefined,
-			{ shallow: true }
-		);
+		router.replace({ pathname: link, query: { lesson: lesson._id } }, undefined, { shallow: true });
 	};
 
 	useEffect(() => {
@@ -60,17 +54,12 @@ const Sidebar: FC<CourseDashboardProps> = ({ ...props }) => {
 			item.lessons.map(c => c._id).includes(lessonId as string)
 		)?._id;
 
-		const findIndex = sections
-			.map(c => c._id)
-			.indexOf(currentModuleId as string);
+		const findIndex = sections.map(c => c._id).indexOf(currentModuleId as string);
 
 		setModuleIndex(findIndex === -1 ? 0 : findIndex);
 	}, [sections]);
 
-	const onComplete = async (
-		evt: ChangeEvent<HTMLInputElement>,
-		lessonID: string
-	) => {
+	const onComplete = async (evt: ChangeEvent<HTMLInputElement>, lessonID: string) => {
 		setIsComplete(true);
 
 		try {
@@ -123,25 +112,16 @@ const Sidebar: FC<CourseDashboardProps> = ({ ...props }) => {
 					<Heading fontSize={'2xl'}>Kurs bo'limlari</Heading>
 					<Flex align={'center'} gap={2} mt={3}>
 						{sections.length}ta Bo'lim <Icon as={GoPrimitiveDot} />{' '}
-						{sections
-							.map(c => c.lessons.length)
-							.reduce((a, b) => +a + +b, 0)}
+						{sections.map(c => c.lessons.length).reduce((a, b) => +a + +b, 0)}
 						ta Darslik
 					</Flex>
 
 					<Accordion mb={5} mr={2} index={moduleIndex}>
 						{sections.map((section, idx) => (
-							<AccordionItem
-								key={section._id}
-								borderRadius={'8px'}
-								mt={5}
-							>
+							<AccordionItem key={section._id} borderRadius={'8px'} mt={5}>
 								<AccordionButton
 									height={'60px'}
-									background={useColorModeValue(
-										'gray.100',
-										'gray.700'
-									)}
+									background={useColorModeValue('gray.100', 'gray.700')}
 									borderRadius={'md'}
 									_hover={{}}
 									fontWeight={'bold'}
@@ -157,10 +137,7 @@ const Sidebar: FC<CourseDashboardProps> = ({ ...props }) => {
 										<Box
 											key={lesson._id}
 											_hover={{
-												background: useColorModeValue(
-													'gray.100',
-													'gray.800'
-												),
+												background: useColorModeValue('gray.100', 'gray.800'),
 											}}
 											transition={'all .3s ease'}
 											borderRadius={'md'}
@@ -170,16 +147,8 @@ const Sidebar: FC<CourseDashboardProps> = ({ ...props }) => {
 													? useColorModeValue('gray.100', 'gray.800')
 													: 'transparent'
 											}
-											fontWeight={
-												router.query.lesson === lesson._id
-													? 'bold'
-													: 'normal'
-											}
-											color={
-												router.query.lesson === lesson._id
-													? 'facebook.500'
-													: 'normal'
-											}
+											fontWeight={router.query.lesson === lesson._id ? 'bold' : 'normal'}
+											color={router.query.lesson === lesson._id ? 'facebook.500' : 'normal'}
 										>
 											<Flex
 												justify={'space-between'}
@@ -192,26 +161,16 @@ const Sidebar: FC<CourseDashboardProps> = ({ ...props }) => {
 													{user ? (
 														<Checkbox
 															colorScheme={'green'}
-															onChange={e =>
-																onComplete(e, lesson._id)
-															}
-															defaultChecked={lesson.completed.includes(
-																user.id
-															)}
-															cursor={
-																isComplete ? 'progress' : 'pointer'
-															}
+															onChange={e => onComplete(e, lesson._id)}
+															defaultChecked={lesson.completed.includes(user.id as string)}
+															cursor={isComplete ? 'progress' : 'pointer'}
 														/>
 													) : null}
 												</Flex>
 												<Flex w={'92%'} justify={'space-between'}>
 													<Text>{lesson.name}</Text>
 													<Text textDecoration={'underline'} ml={1}>
-														{getLessonTime(
-															lesson.hour,
-															lesson.minute,
-															lesson.second
-														)}
+														{getLessonTime(lesson.hour, lesson.minute, lesson.second)}
 													</Text>
 												</Flex>
 											</Flex>
