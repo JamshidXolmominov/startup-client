@@ -9,20 +9,20 @@ This project is a real startup. You can see admin, instructor and user professio
 
 #Stack
 
-NextJS
-TypeScript
-I18next
-Stripe
-Redux toolkit
-Redux thunk
-Formik
-Yup
-Next auth
-ChartJS
-Admin, Instructor and User dashboards
-Graphql
-Hygraph
-SSR
-SEO friendly
-High Order Components
-Layouts
+-NextJS
+-TypeScript
+-I18next
+-Stripe
+-Redux toolkit
+-Redux thunk
+-Formik
+-Yup
+-Next auth
+-ChartJS
+-Admin, Instructor and User dashboards
+-Graphql
+-Hygraph
+-SSR
+-SEO friendly
+-High Order Components
+-Layouts
